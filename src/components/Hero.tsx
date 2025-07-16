@@ -39,9 +39,9 @@ export function Hero() {
           <div className="flex justify-center lg:justify-end">
             <div className="relative">
               <img
-                src="/assets/icon.png"
-                alt="Finly App Icon"
-                className="w-32 h-32 sm:w-40 sm:h-40 rounded-3xl shadow-2xl"
+                src="assets/icon.png"
+                alt="Finly Logo"
+                className="mx-auto h-16 w-16"
               />
               <div className="absolute -top-4 -right-4 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                 <svg

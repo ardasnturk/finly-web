@@ -10,7 +10,7 @@ export function Features() {
   } catch (error) {
     // Fallback function if context is not available
     getScreenshotPath = (number: number) => {
-      return `/assets/Screenshots/EN/${number}.png`;
+      return `assets/Screenshots/EN/${number}.png`;
     };
   }
 
@@ -144,7 +144,7 @@ export function Features() {
                   onError={(e) => {
                     // Fallback to EN if image fails to load
                     const target = e.target as HTMLImageElement;
-                    target.src = `/assets/Screenshots/EN/${num.toString()}.png`;
+                    target.src = `assets/Screenshots/EN/${num.toString()}.png`;
                   }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-2xl transition-all duration-300" />

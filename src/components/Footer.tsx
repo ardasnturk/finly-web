@@ -33,11 +33,7 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <img
-                src="/assets/icon.png"
-                alt="Finly"
-                className="w-8 h-8 rounded-lg"
-              />
+              <img src="assets/icon.png" alt="Finly Logo" className="h-8 w-8" />
               <span className="text-xl font-bold">Finly</span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">

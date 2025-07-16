@@ -53,7 +53,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     const langFolder = langMap[language];
     // Dosya isimleri 1.png, 2.png vs. şeklinde, padStart kullanmıyoruz
-    return `/assets/Screenshots/${langFolder}/${number}.png`;
+    return `assets/Screenshots/${langFolder}/${number}.png`;
   };
 
   return (
