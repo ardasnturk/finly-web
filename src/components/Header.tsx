@@ -1,88 +1,44 @@
-import { useTheme } from "./ThemeProvider";
+import { useEffect, useState } from "react";
+import { APP_STORE_URL } from "../config";
+import { useLanguage } from "../i18n";
+import { LanguageSelect } from "./LanguageSelect";
 
 export function Header() {
-  const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
+  const [scrolled, setScrolled] = useState(false);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const links = [
+    { href: "/#features", label: t.nav.features },
+    { href: "/#watch", label: t.nav.watch },
+    { href: "/#pro", label: t.nav.pro },
+    { href: "/#faq", label: t.nav.faq },
+  ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <img src="assets/icon.png" alt="Finly Logo" className="h-8 w-8" />
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              Finly
-            </span>
-          </div>
-
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <button
-              onClick={() => scrollToSection("features")}
-              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              Features
-            </button>
-            <button
-              onClick={() => scrollToSection("testimonials")}
-              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              Testimonials
-            </button>
-            <button
-              onClick={() => scrollToSection("faq")}
-              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              FAQ
-            </button>
-          </nav>
-
-          {/* Theme Toggle & Download Button */}
-          <div className="flex items-center space-x-4">
-            {/* <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === "light" ? (
-                <svg
-                  className="w-5 h-5 text-gray-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              ) : (
-                <svg
-                  className="w-5 h-5 text-gray-300"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
-            </button> */}
-
-            <a
-              href="https://apps.apple.com/us/app/budget-tracker-finance-finly/id6747941491"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-            >
-              Download
-            </a>
-          </div>
+    <header className={`fixed inset-x-0 top-0 z-50 transition ${scrolled ? "border-b border-gray-200/70 bg-white/80 backdrop-blur-xl dark:border-gray-800/70 dark:bg-gray-950/80" : "bg-transparent"}`}>
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <a href="/" className="flex items-center gap-2.5">
+          <img src="/assets/icon.png" alt="" className="h-8 w-8 rounded-[0.6rem]" />
+          <span className="text-lg font-bold tracking-tight">Finly</span>
+        </a>
+        <nav className="hidden items-center gap-7 text-sm font-medium text-gray-600 md:flex dark:text-gray-300">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} className="transition hover:text-gray-950 dark:hover:text-white">{link.label}</a>
+          ))}
+        </nav>
+        <div className="flex items-center gap-3">
+          <LanguageSelect className="text-gray-700 dark:text-gray-200" />
+          <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer"
+            className="hidden rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark sm:inline-flex">
+            {t.nav.download}
+          </a>
         </div>
       </div>
     </header>

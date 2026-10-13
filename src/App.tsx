@@ -1,29 +1,48 @@
-import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { Features } from "./components/Features";
-import { Testimonials } from "./components/Testimonials";
-import { FAQ } from "./components/FAQ";
+import { useEffect } from "react";
 import { Footer } from "./components/Footer";
-import { ThemeProvider } from "./components/ThemeProvider";
-import { LanguageProvider } from "./components/LanguageProvider";
+import { Header } from "./components/Header";
+import { LanguageProvider, useLanguage } from "./i18n";
+import { Home } from "./pages/Home";
+import { Legal } from "./pages/Legal";
+import { Support } from "./pages/Support";
 
-function App() {
+export type Page = "home" | "privacy" | "terms" | "support";
+
+function Content({ page }: { page: Page }) {
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    const titles: Record<Page, string> = {
+      home: t.meta.title,
+      privacy: `${t.legal.privacyTitle} – Finly`,
+      terms: `${t.legal.termsTitle} – Finly`,
+      support: `${t.support.title} – Finly`,
+    };
+    document.title = titles[page];
+    document.querySelector('meta[name="description"]')?.setAttribute("content", t.meta.description);
+  }, [page, t]);
+
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <div className="min-h-screen bg-white dark:bg-gray-950">
-          <Header />
-          <main>
-            <Hero />
-            <Features />
-            <Testimonials />
-            <FAQ />
-          </main>
-          <Footer />
-        </div>
-      </LanguageProvider>
-    </ThemeProvider>
+    <div className="min-h-screen bg-white text-gray-950 dark:bg-gray-950 dark:text-white">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-gray-950">
+        Skip to content
+      </a>
+      <Header />
+      <main id="main">
+        {page === "home" && <Home />}
+        {page === "privacy" && <Legal kind="privacy" />}
+        {page === "terms" && <Legal kind="terms" />}
+        {page === "support" && <Support />}
+      </main>
+      <Footer />
+    </div>
   );
 }
 
-export default App;
+export default function App({ page }: { page: Page }) {
+  return (
+    <LanguageProvider>
+      <Content page={page} />
+    </LanguageProvider>
+  );
+}
